@@ -50,19 +50,24 @@ class Posts extends Component {
 
   //Get request to get posts for the list.//
 
-    componentDidMount() {
-      axios
-        .get(`https://expat-lambda.herokuapp.com/api/user/posts/:id`)
+  componentDidMount() {
+    const headers = { authorization: localStorage.getItem('token') };
+    // const token = localStorage.getItem('token');
+    // const params =  {headers: {Authorization: token}}
+    axios
+      .get(`https://expat-lambda.herokuapp.com/api/user/posts/1`, {headers})
+      // .get(`http://localhost:7777/api/user/posts/5`, params)
+      .then(response => {
+        console.log(response);
+        console.log(response.data)
+        this.setState({
+          posts: response.data,
+          loading: false
 
-        .then(response => {
-          console.log(response);
-          this.setState({
-            posts: response.data,
-            loading: false
-          });
-        })
-        .catch(err => console.log(err));
-    }
+        });
+      })
+      .catch(error => console.log(error.response.data));
+  }
 
   render() {
     return (

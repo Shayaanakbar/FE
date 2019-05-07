@@ -49,8 +49,10 @@ class NewPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      textBody: ""
+      // id: this.state.id,
+      user_id: 35,
+      title: "title",
+      description: "text body"
     };
   }
 
@@ -63,29 +65,56 @@ class NewPost extends Component {
     });
   };
 
-  addNew = e => {
+
+
+  addNew = (e) => {
     e.preventDefault();
+    let address = `https://expat-lambda.herokuapp.com/api/posts`;
+    // const headers = { authorization: localStorage.getItem('token') };
+    const token = localStorage.getItem('token');
+    const params =  {headers: {Authorization: token}}
+    console.log('token', token)
+    console.log("this.state", this.state)
+    // console.log('headers', headers)
+    // console.log('newpost!!!!!!!', newPost)
     axios
       .post(
-        `https://expat-lambda.herokuapp.com/api/posts/post/create`,
-        this.state
+        address, this.state,
+        params
       )
       .then(response => {
-        this.props.addNoteOnServer(response.data);
+        console.log('response',response.data);
+        // this.setState(previousState => ({...this.state [previousState.state, this.state]}))
+        // this.props.addNew(response);
+        // this.props.addNew({...this.state [response.data.success]});
+        // this.props.history.push('/PostAlbum')
+        window.location.reload()
       })
-      .catch(err => console.log("Error", err));
-    this.setState({
-      title: "",
-      textBody: ""
-    });
+      .catch(error => console.log("post error message", error));
+    // this.setState({
+    //   id: "",
+    //   user_id: null,
+    //   title: "",
+    //   description: ""
+    // });
   };
 
+
   render() {
+    console.log('props...', this.props)
     return (
       <Wrapper>
         <div className="createContainer">
           <H2> Create New Post: </H2>{" "}
           <Form className="form" onSubmit={this.addNew}>
+            <InputTitle
+              className="user_id"
+              type="textarea"
+              name="user_id"
+              placeholder="user_id"
+              onChange={this.inputChangeHandler}
+              value={this.state.user_id}
+            />
             <InputTitle
               className="title"
               type="textarea"
@@ -95,12 +124,12 @@ class NewPost extends Component {
               value={this.state.title}
             />
             <InputBody
-              className="textBody"
+              className="description"
               type="textarea"
-              name="textBody"
+              name="description"
               placeholder="Post Content"
               onChange={this.inputChangeHandler}
-              value={this.state.textBody}
+              value={this.state.description}
             />{" "}
             <Button type="submit"> Save </Button>{" "}
           </Form>{" "}
@@ -111,3 +140,4 @@ class NewPost extends Component {
 }
 
 export default NewPost;
+
