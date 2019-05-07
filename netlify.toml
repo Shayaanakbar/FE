@@ -1,4 +1,6 @@
 [build]
-base="myapp/"
-publish = "myapp/build/"
-command = "yarn build"
+base="expat-journal/"
+publish = "expat-journal/build/"
+command = "yar build"
+
+
